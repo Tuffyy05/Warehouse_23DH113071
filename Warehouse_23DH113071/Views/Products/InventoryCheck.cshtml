@@ -1,0 +1,106 @@
+﻿@model Warehouse_23DH113071.Models.SingleInventoryCheckViewModel
+@{
+    ViewBag.Title = "Kiểm Kê Đơn Lẻ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-card-modern">
+    <div class="page-header-strip">
+        <div>
+            <h2 class="page-title-modern">KIỂM KÊ VÀ CẬP NHẬT TỒN KHO (1 SẢN PHẨM)</h2>
+            <div class="page-subtitle-modern">Câu 4: Chọn sản phẩm, nhập số lượng thực tế kiểm kê, tính chênh lệch tăng/giảm và cập nhật CSDL</div>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-modern-success">
+            <strong>Thông báo:</strong> @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert-modern-danger">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger mb-0" })
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-lg-7">
+            @using (Html.BeginForm("InventoryCheck", "Products", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-dark">Chọn sản phẩm cần kiểm kê (*):</label>
+                    @Html.DropDownListFor(m => m.ProductID, Model.ProductList, "-- Chọn sản phẩm --", new { @class = "form-control-modern", id = "ddlProduct" })
+                    @Html.ValidationMessageFor(m => m.ProductID, "", new { @class = "text-danger small mt-1 d-block" })
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-muted">Số lượng hiện tại trên hệ thống:</label>
+                    <input type="text" id="txtSystemQty" class="form-control-modern bg-light" 
+                           value="@(Model.SystemQuantity >= 0 ? Model.SystemQuantity.ToString() : "Chưa chọn")" readonly />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-dark">Số lượng thực tế kiểm kê (*):</label>
+                    @Html.TextBoxFor(m => m.ActualQuantity, new { @class = "form-control-modern", id = "txtActualQty", type = "number", min = "0", placeholder = "Nhập số lượng thực tế đếm được..." })
+                    @Html.ValidationMessageFor(m => m.ActualQuantity, "", new { @class = "text-danger small mt-1 d-block" })
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn-teal">
+                        Xác Nhận & Cập Nhật Tồn Kho
+                    </button>
+                    <a href="@Url.Action("Index", "Products")" class="btn-secondary-modern">
+                        Quay lại
+                    </a>
+                </div>
+            }
+        </div>
+
+        <div class="col-lg-5">
+            @if (Model.ProductID > 0)
+            {
+                <div class="card p-4 border-0 h-100" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <h5 class="fw-bold text-dark pb-2 border-bottom">KẾT QUẢ ĐỐI SOÁT KIỂM KÊ</h5>
+                    
+                    <div class="my-3">
+                        <div class="text-muted small">Sản phẩm:</div>
+                        <div class="fw-bold fs-6 text-dark">@Model.ProductName</div>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div class="p-3 bg-white rounded border text-center">
+                                <div class="small text-muted">Hệ thống</div>
+                                <div class="fs-4 fw-bold text-secondary">@Model.SystemQuantity</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-white rounded border text-center">
+                                <div class="small text-muted">Thực tế</div>
+                                <div class="fs-4 fw-bold text-primary">@Model.ActualQuantity</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded text-center fw-bold @(Model.DifferenceStatus == "Tăng" ? "bg-success text-white" : Model.DifferenceStatus == "Giảm" ? "bg-danger text-white" : "bg-info text-white")">
+                        Chênh lệch: @(Model.Difference >= 0 ? "+" + Model.Difference : Model.Difference.ToString()) (@Model.DifferenceStatus)
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card p-4 border-0 h-100 text-center d-flex align-items-center justify-content-center text-muted" style="background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+                    <div>
+                        <div class="fs-2 text-secondary mb-2">&#9776;</div>
+                        <div class="fw-semibold">Vui lòng chọn sản phẩm và nhập số lượng thực tế để đối soát kiểm kê.</div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

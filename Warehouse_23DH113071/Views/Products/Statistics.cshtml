@@ -1,0 +1,97 @@
+﻿@model Warehouse_23DH113071.Models.StatisticsViewModel
+@{
+    ViewBag.Title = "Báo Cáo Thống Kê";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-card-modern">
+    <div class="page-header-strip">
+        <div>
+            <h2 class="page-title-modern">BÁO CÁO THỐNG KÊ TỒN KHO</h2>
+            <div class="page-subtitle-modern">Câu 7: Thống kê tổng số lượng sản phẩm, số sản phẩm hết hàng, tổng giá trị tồn kho (LINQ)</div>
+        </div>
+    </div>
+
+    <!-- 3 STATISTIC METRIC CARDS -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card p-4 border-0 shadow-sm h-100" style="border-top: 4px solid #0f766e !important; border-radius: 12px; background: #ffffff; border: 1px solid #e2e8f0;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold text-uppercase" style="letter-spacing: 0.05em;">TỔNG SỐ SẢN PHẨM</span>
+                    <span class="badge bg-light text-dark border">LINQ Count</span>
+                </div>
+                <div class="fs-1 fw-bold" style="color: #0f766e;">
+                    @Model.TotalProducts
+                </div>
+                <small class="text-muted mt-2 d-block">Mặt hàng đang được quản lý trong kho</small>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-4 border-0 shadow-sm h-100" style="border-top: 4px solid #ef4444 !important; border-radius: 12px; background: #ffffff; border: 1px solid #e2e8f0;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold text-uppercase" style="letter-spacing: 0.05em;">SẢN PHẨM HẾT HÀNG</span>
+                    <span class="badge bg-light text-danger border">Quantity = 0</span>
+                </div>
+                <div class="fs-1 fw-bold text-danger">
+                    @Model.OutOfStockCount
+                </div>
+                <small class="text-muted mt-2 d-block">Mặt hàng cần nhập thêm gấp vào kho</small>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-4 border-0 shadow-sm h-100" style="border-top: 4px solid #3b82f6 !important; border-radius: 12px; background: #ffffff; border: 1px solid #e2e8f0;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold text-uppercase" style="letter-spacing: 0.05em;">TỔNG GIÁ TRỊ TỒN KHO</span>
+                    <span class="badge bg-light text-primary border">Sum(Price*Qty)</span>
+                </div>
+                <div class="fs-2 fw-bold text-primary">
+                    @Model.TotalInventoryValue.ToString("N2") đ
+                </div>
+                <small class="text-muted mt-2 d-block">Tổng vốn hàng hóa hiện có trong kho</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAIL TABLE -->
+    <h5 class="fw-bold text-dark mb-3 mt-4">CHI TIẾT DANH MỤC HÀNG HÓA TỒN KHO</h5>
+    <div class="table-responsive">
+        <table class="table-modern">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Mã SP</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Danh Mục</th>
+                    <th class="text-end">Đơn Giá</th>
+                    <th class="text-center">Số Lượng</th>
+                    <th class="text-end">Thành Tiền (Tồn Kho)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model.ProductDetails)
+                {
+                    <tr>
+                        <td class="fw-bold text-muted">#@p.ProductID</td>
+                        <td class="fw-semibold text-dark">@p.ProductName</td>
+                        <td><span class="badge bg-light text-secondary border">@p.Category</span></td>
+                        <td class="text-end">@p.Price.ToString("N2") đ</td>
+                        <td class="text-center fw-bold">@p.Quantity</td>
+                        <td class="text-end fw-bold" style="color: #0f766e;">
+                            @((p.Price * p.Quantity).ToString("N2")) đ
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr style="background: #f8fafc; font-weight: bold;">
+                    <td colspan="4" class="text-end text-uppercase">TỔNG CỘNG:</td>
+                    <td class="text-center">@Model.ProductDetails.Sum(p => p.Quantity)</td>
+                    <td class="text-end" style="color: #0f766e; font-size: 1.05rem;">
+                        @Model.TotalInventoryValue.ToString("N2") đ
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

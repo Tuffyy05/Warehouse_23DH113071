@@ -1,0 +1,102 @@
+﻿@model Warehouse_23DH113071.Models.DoubleInventoryCheckViewModel
+@{
+    ViewBag.Title = "Kiểm Kê 2 Sản Phẩm (Transaction)";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-card-modern">
+    <div class="page-header-strip">
+        <div>
+            <h2 class="page-title-modern">KIỂM KÊ ĐỒNG THỜI 2 SẢN PHẨM (TRANSACTION)</h2>
+            <div class="page-subtitle-modern">Câu 5: Cập nhật đồng thời 2 sản phẩm trong 1 Transaction. Nếu có bất kỳ lỗi nào, hệ thống Rollback toàn bộ.</div>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-modern-success">
+            <strong>Giao dịch thành công (Commit):</strong> @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert-modern-danger">
+            <strong>Giao dịch thất bại (Rollback):</strong> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert-modern-danger">
+            <strong>Lỗi kiểm tra dữ liệu:</strong>
+            @Html.ValidationSummary(false, "", new { @class = "text-danger mb-0 mt-1" })
+        </div>
+    }
+
+    @using (Html.BeginForm("InventoryCheckTwo", "Products", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row g-4 mb-4">
+            <!-- PRODUCT 1 -->
+            <div class="col-md-6">
+                <div class="card p-4 border-0 h-100" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <h5 class="fw-bold text-dark mb-0">SẢN PHẨM THỨ NHẤT (SP 1)</h5>
+                        <span class="badge" style="background: #0f766e; color: white;">Mục 1</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">CHỌN SẢN PHẨM 1 (*):</label>
+                        @Html.DropDownListFor(m => m.ProductID1, Model.ProductList1, "-- Chọn sản phẩm 1 --", new { @class = "form-control-modern" })
+                        @Html.ValidationMessageFor(m => m.ProductID1, "", new { @class = "text-danger small mt-1 d-block" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label fw-bold small text-muted">SỐ LƯỢNG THỰC TẾ KIỂM KÊ (*):</label>
+                        @Html.TextBoxFor(m => m.ActualQuantity1, new { @class = "form-control-modern", type = "number", placeholder = "Nhập số lượng thực tế SP 1..." })
+                        @Html.ValidationMessageFor(m => m.ActualQuantity1, "", new { @class = "text-danger small mt-1 d-block" })
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT 2 -->
+            <div class="col-md-6">
+                <div class="card p-4 border-0 h-100" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <h5 class="fw-bold text-dark mb-0">SẢN PHẨM THỨ HAI (SP 2)</h5>
+                        <span class="badge" style="background: #0f766e; color: white;">Mục 2</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">CHỌN SẢN PHẨM 2 (*):</label>
+                        @Html.DropDownListFor(m => m.ProductID2, Model.ProductList2, "-- Chọn sản phẩm 2 --", new { @class = "form-control-modern" })
+                        @Html.ValidationMessageFor(m => m.ProductID2, "", new { @class = "text-danger small mt-1 d-block" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label fw-bold small text-muted">SỐ LƯỢNG THỰC TẾ KIỂM KÊ (*):</label>
+                        @Html.TextBoxFor(m => m.ActualQuantity2, new { @class = "form-control-modern", type = "number", placeholder = "Nhập số lượng thực tế SP 2..." })
+                        @Html.ValidationMessageFor(m => m.ActualQuantity2, "", new { @class = "text-danger small mt-1 d-block" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert-modern-info d-flex align-items-center gap-3">
+            <div class="small">
+                <strong>Cơ chế an toàn giao dịch (Atomic Transaction):</strong> Hai sản phẩm phải khác nhau. Cả hai số lượng phải là số nguyên không âm. Nếu một trong hai sản phẩm xảy ra lỗi, toàn bộ giao dịch sẽ Rollback để bảo toàn tính toàn vẹn dữ liệu.
+            </div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn-teal">
+                Thực Hiện Giao Dịch Kiểm Kê 2 Sản Phẩm
+            </button>
+            <a href="@Url.Action("Index", "Products")" class="btn-secondary-modern">
+                Quay lại
+            </a>
+        </div>
+    }
+</div>

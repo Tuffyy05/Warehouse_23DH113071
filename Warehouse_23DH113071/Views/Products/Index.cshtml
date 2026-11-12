@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Warehouse_23DH113071.Models.Product>
+@{
+    ViewBag.Title = "Danh Sách Sản Phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-card-modern">
+    <div class="page-header-strip">
+        <div>
+            <h2 class="page-title-modern">DANH SÁCH SẢN PHẨM & TỒN KHO</h2>
+            <div class="page-subtitle-modern">Câu 2a: Hiển thị danh sách sản phẩm kèm trạng thái tồn kho</div>
+        </div>
+        <div>
+            <a href="@Url.Action("Create", "Products")" class="btn-teal">
+                + Thêm Sản Phẩm Mới
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-modern-success">
+            <strong>Thành công:</strong> @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="table-modern">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Mã SP</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Danh Mục</th>
+                    <th class="text-end">Đơn Giá</th>
+                    <th class="text-center">Số Lượng</th>
+                    <th class="text-center">Trạng Thái Tồn Kho</th>
+                    <th class="text-center" style="width: 140px;">Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-bold text-muted">#@item.ProductID</td>
+                        <td class="fw-semibold text-dark">@item.ProductName</td>
+                        <td>
+                            <span class="badge bg-light text-secondary border">@item.Category</span>
+                        </td>
+                        <td class="text-end fw-bold" style="color: #0f766e;">
+                            @item.Price.ToString("N2") đ
+                        </td>
+                        <td class="text-center fw-bold fs-6">
+                            @item.Quantity
+                        </td>
+                        <td class="text-center">
+                            @if (item.Quantity == 0)
+                            {
+                                <span class="badge-stock badge-stock-out">Hết hàng</span>
+                            }
+                            else if (item.Quantity < 5)
+                            {
+                                <span class="badge-stock badge-stock-low">Sắp hết (@item.Quantity)</span>
+                            }
+                            else
+                            {
+                                <span class="badge-stock badge-stock-in">Đủ hàng</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <a href="@Url.Action("Edit", "Products", new { id = item.ProductID })" 
+                               class="btn-outline-teal">
+                                Sửa
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top text-muted" style="font-size: 0.85rem;">
+        <div>Tổng cộng: <strong>@Model.Count()</strong> sản phẩm trong hệ thống</div>
+        <div>Quy tắc tồn kho: <em>Số lượng = 0: Hết hàng | Dưới 5: Sắp hết | Còn lại: Đủ hàng</em></div>
+    </div>
+</div>

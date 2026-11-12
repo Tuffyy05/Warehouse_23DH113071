@@ -1,0 +1,434 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Quản Lý Kho Hàng 23DH113071</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        :root {
+            --primary-teal: #0f766e;
+            --primary-teal-hover: #115e59;
+            --primary-teal-light: #ccfbf1;
+            --dark-slate: #0f172a;
+            --secondary-slate: #1e293b;
+            --border-color: #e2e8f0;
+            --bg-canvas: #f8fafc;
+        }
+        body {
+            background-color: var(--bg-canvas);
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+        .main-wrapper {
+            flex: 1;
+            padding: 24px 0;
+        }
+        .app-topbar {
+            background-color: var(--dark-slate);
+            border-bottom: 3px solid var(--primary-teal);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+        .brand-logo-box {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #14b8a6, #0f766e);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.15rem;
+            box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3);
+            letter-spacing: -0.5px;
+        }
+        .user-profile-badge {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+            padding: 6px 18px 6px 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .user-avatar-circle {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #0d9488, #059669);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: 2px solid rgba(255,255,255,0.4);
+        }
+        .nav-card {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        .nav-card-header {
+            background: #f8fafc;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 700;
+            font-size: 0.82rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+        .custom-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 13px 18px;
+            color: #334155;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+            font-size: 0.92rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .custom-nav-link:last-child {
+            border-bottom: none;
+        }
+        .custom-nav-link:hover {
+            background-color: #f0fdfa;
+            color: var(--primary-teal);
+            border-left-color: #14b8a6;
+            text-decoration: none;
+            padding-left: 22px;
+        }
+        .custom-nav-link.active {
+            background-color: #f0fdfa;
+            color: var(--primary-teal);
+            border-left-color: var(--primary-teal);
+            font-weight: 600;
+        }
+        .nav-num-badge {
+            background: #e2e8f0;
+            color: #475569;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 6px;
+            margin-right: 12px;
+            min-width: 26px;
+            text-align: center;
+        }
+        .custom-nav-link.active .nav-num-badge {
+            background: var(--primary-teal);
+            color: white;
+        }
+        .content-card-modern {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        .page-header-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 16px;
+            margin-bottom: 22px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        .page-title-modern {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--dark-slate);
+            margin: 0;
+        }
+        .page-subtitle-modern {
+            font-size: 0.88rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        .btn-teal {
+            background: var(--primary-teal);
+            color: #ffffff !important;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 20px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(15, 118, 110, 0.2);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-teal:hover {
+            background: var(--primary-teal-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(15, 118, 110, 0.3);
+            text-decoration: none;
+        }
+        .btn-outline-teal {
+            border: 1.5px solid var(--primary-teal);
+            color: var(--primary-teal) !important;
+            background: transparent;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-outline-teal:hover {
+            background: var(--primary-teal);
+            color: #ffffff !important;
+            text-decoration: none;
+        }
+        .btn-secondary-modern {
+            background: #e2e8f0;
+            color: #334155 !important;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 20px;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-secondary-modern:hover {
+            background: #cbd5e1;
+            text-decoration: none;
+        }
+        .badge-stock {
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            display: inline-block;
+        }
+        .badge-stock-in {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+        .badge-stock-low {
+            background: #fffbeb;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+        .badge-stock-out {
+            background: #fff1f2;
+            color: #be123c;
+            border: 1px solid #fecdd3;
+        }
+        .table-modern {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table-modern thead th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            border-top: none;
+        }
+        .table-modern tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            font-size: 0.92rem;
+        }
+        .table-modern tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        .form-control-modern {
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 9px 14px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .form-control-modern:focus {
+            outline: none;
+            border-color: var(--primary-teal);
+            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+        }
+        .alert-modern-danger {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            color: #991b1b;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+        }
+        .alert-modern-success {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+            color: #065f46;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+        }
+        .alert-modern-info {
+            background: #f0fdfa;
+            border-left: 4px solid #14b8a6;
+            color: #115e59;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+        }
+        .app-footer-modern {
+            background-color: var(--dark-slate);
+            color: #94a3b8;
+            padding: 20px 0;
+            border-top: 1px solid #334155;
+            font-size: 0.88rem;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- TOP APPLICATION BAR -->
+    <header class="app-topbar py-3">
+        <div class="container-fluid px-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="brand-logo-box">
+                        WH
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="h5 mb-0 fw-bold text-white">SMART INVENTORY</span>
+                            <span class="badge bg-secondary" style="font-size: 0.72rem; letter-spacing: 0.05em;">CA 4</span>
+                        </div>
+                        <small style="color: #94a3b8;">Hệ thống Quản lý & Kiểm kê Kho hàng | ASP.NET MVC 5</small>
+                    </div>
+                </div>
+                <div>
+                    <div class="user-profile-badge">
+                        <div class="user-avatar-circle">
+                            TT
+                        </div>
+                        <div>
+                            <div class="text-white fw-bold" style="font-size: 0.92rem;">Lê Ngọc Tấn Tài</div>
+                            <div style="color: #2dd4bf; font-size: 0.8rem; font-weight: 600;">MSSV: 23DH113071</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid px-4 main-wrapper">
+        <div class="row">
+            <!-- SIDEBAR NAVIGATION -->
+            <div class="col-lg-3 col-md-4 mb-4">
+                <div class="nav-card">
+                    <div class="nav-card-header d-flex justify-content-between align-items-center">
+                        <span>ĐIỀU HƯỚNG BÀI THI</span>
+                        <span class="badge bg-light text-secondary border">7 CÂU</span>
+                    </div>
+                    <nav class="nav flex-column">
+                        <a class="custom-nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")"
+                           href="@Url.Action("Index", "Products")">
+                            <span class="nav-num-badge">02</span>
+                            <div>
+                                <div class="fw-semibold">Danh sách & Tồn kho</div>
+                                <small class="text-muted" style="font-size: 0.78rem;">Câu 2a - Hiển thị trạng thái</small>
+                            </div>
+                        </a>
+                        <a class="custom-nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Search" ? "active" : "")"
+                           href="@Url.Action("Search", "Products")">
+                            <span class="nav-num-badge">03</span>
+                            <div>
+                                <div class="fw-semibold">Tra cứu & Bộ lọc</div>
+                                <small class="text-muted" style="font-size: 0.78rem;">Câu 3 - Tìm kiếm & sắp xếp</small>
+                            </div>
+                        </a>
+                        <a class="custom-nav-link @(ViewContext.RouteData.Values["action"].ToString() == "InventoryCheck" ? "active" : "")"
+                           href="@Url.Action("InventoryCheck", "Products")">
+                            <span class="nav-num-badge">04</span>
+                            <div>
+                                <div class="fw-semibold">Kiểm kê đơn (1 SP)</div>
+                                <small class="text-muted" style="font-size: 0.78rem;">Câu 4 - Cập nhật chênh lệch</small>
+                            </div>
+                        </a>
+                        <a class="custom-nav-link @(ViewContext.RouteData.Values["action"].ToString() == "InventoryCheckTwo" ? "active" : "")"
+                           href="@Url.Action("InventoryCheckTwo", "Products")">
+                            <span class="nav-num-badge">05</span>
+                            <div>
+                                <div class="fw-semibold">Kiểm kê kép (2 SP)</div>
+                                <small class="text-muted" style="font-size: 0.78rem;">Câu 5 - Giao dịch Transaction</small>
+                            </div>
+                        </a>
+                        <a class="custom-nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Create" ? "active" : "")"
+                           href="@Url.Action("Create", "Products")">
+                            <span class="nav-num-badge">06</span>
+                            <div>
+                                <div class="fw-semibold">Thêm sản phẩm mới</div>
+                                <small class="text-muted" style="font-size: 0.78rem;">Câu 6 - Chặn trùng tên</small>
+                            </div>
+                        </a>
+                        <a class="custom-nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Statistics" ? "active" : "")"
+                           href="@Url.Action("Statistics", "Products")">
+                            <span class="nav-num-badge">07</span>
+                            <div>
+                                <div class="fw-semibold">Báo cáo & Thống kê</div>
+                                <small class="text-muted" style="font-size: 0.78rem;">Câu 7 - Tổng quan kho</small>
+                            </div>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="card border-0 p-3" style="background: #f1f5f9; border-radius: 12px; font-size: 0.82rem;">
+                    <div class="fw-bold text-dark mb-1">THÔNG TIN KẾT NỐI</div>
+                    <div class="text-muted">CSDL: <strong>Warehouse_23DH113071</strong></div>
+                    <div class="text-muted">Máy chủ: <strong>SQL Server (.) / LocalDB</strong></div>
+                    <div class="text-muted">Mô hình: <strong>Entity Framework 6</strong></div>
+                </div>
+            </div>
+
+            <!-- MAIN CONTENT AREA -->
+            <div class="col-lg-9 col-md-8">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER CHUNG: Ngày sinh 15/08/2005 -->
+    <footer class="app-footer-modern">
+        <div class="container-fluid px-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <div>
+                    <strong>Lê Ngọc Tấn Tài</strong> &bull; MSSV: <strong>23DH113071</strong> &bull; Ngày sinh: <strong>15/08/2005</strong>
+                </div>
+                <div class="text-muted">
+                    Solution: <strong>Warehouse_23DH113071</strong> &bull; Lập trình Web Ca 4
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
